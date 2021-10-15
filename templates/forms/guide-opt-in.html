@@ -1,0 +1,16 @@
+<div class="modal fade" tabindex="-1" role="dialog" id="optinmodal">{% load static add_class %}
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-center">{{ value.form.title }}</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <script type="text/javascript" src="{{ self.infusionsoft_link }}"></script>
+            </div>
+        </div>
+    </div>
+</div>{% block extra_js %}
+    <script src="{% static 'vendor/cleave.js/dist/cleave.min.js' %}"></script>{% endblock %}

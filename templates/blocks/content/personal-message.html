@@ -1,0 +1,20 @@
+<div class="container border-top mt-3">{% load static wagtailcore_tags wagtailimages_tags %}
+    <section class="py-4">
+        <div class="row pt-md-5">
+            <div class="col-md-4 justify-content-center text-center">
+                <picture>
+                    {% image self.image fill-280x280 format-webp as image_webp %}
+                    <source srcset="{{ image_webp.url }}" type="image/webp">
+                    {% image self.image fill-280x280 format-png as image_png %}
+                    <source srcset="{{ image_png.url }}" type="image/png">
+                    {% image self.image fill-280x280 class="rounded-circle" format-png %}
+                </picture>
+            </div>
+            <div class="col-md-7 pt-4 pt-md-0 mb-lg-4 pb-lg-2">
+                <h3 class="h4 text-center">{{ self.heading }}</h3>
+                <div class="font-size-lg">{{ self.message|richtext }}</div>
+                {% if self.button %}<a class="btn btn-warning" data-toggle="modal" data-target="#optinmodal">{{ self.button_text }}</a>{% endif %}
+            </div>
+        </div>
+    </section>
+</div>

@@ -1,0 +1,66 @@
+{% extends 'base/base.html' %}{% load static wagtailimages_tags wagtailcore_tags %}
+
+{% block content %}
+    <section class="jarallax bg-gradient pt-5 pb-7 pt-md-7" data-jarallax data-speed="0.65">
+        <span class="bg-overlay" style="opacity: {{ self.overlay_opacity }}; background-color: {{ self.overlay_color }}"></span>{% image self.title_image width-1920 as title_background %}
+        <div class="jarallax-img" style="background-image: url({{ title_background.url }});"></div>
+        <div class="cs-shape cs-shape-bottom cs-shape-slant bg-body">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 260">
+                <polygon fill="currentColor" points="0,257 0,260 3000,260 3000,0"></polygon>
+            </svg>
+        </div>
+        <div class="container bg-overlay-content pt-3 pb-7 pt-md-0">
+            <div class="row justify-content-center pb-2 pt-6">
+                <div class="col-lg-10">
+                    <h1 class="text-light">{{ page.title }}</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="py-1 my-2 breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="/" class="text-light">Home</a></li>
+                            <li class="breadcrumb-item active text-light" aria-current="page">{{ page.title }}</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="container bg-overlay-content">
+        <div class="row justify-content-center" style="margin-top: -200px;"></div>
+    </section>
+    <section class="container overflow-hidden pb-4 pb-md-2 bg-overlay-content">
+        <div class="cs-masonry-filterable mb-3">
+            <ul class="cs-masonry-filters nav nav-tabs justify-content-center pb-4">
+                <li class="nav-item"><a class="btn btn-outline-light active" href="#" data-group="all">All</a></li>
+                {% for tag in tags %}
+                    <li class="nav-item">
+                        <a class="btn btn-outline-light" href="#" data-group="{{ tag|slugify }}">{{ tag }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+            <div class="cs-masonry-grid" data-columns="2">
+                {% for video in all_videos %}
+                    <div class="cs-grid-item" data-groups="[{% for tag in video.tags.all %}{% if not forloop.first %}, {% endif %}&quot;{{ tag|slugify }}&quot;{% endfor %}]">
+                        <a class="card card-hover border-0 box-shadow-lg" href="{{ video.url }}">
+                            <picture>
+                                {% image video.video_thumbnail fill-680x580 format-webp as image_webp %}
+                                <source srcset="{{ image_webp.url }}" type="image/webp">
+                                {% image video.video_thumbnail fill-680x580 format-png as image_png %}
+                                <source srcset="{{ image_png.url }}" type="image/png">
+                                {% image video.video_thumbnail fill-680x580 class="card-img-top" format-png %}
+                            </picture>
+                            <div class="card-body text-center">
+                                <h3 class="h5 nav-heading mb-2">{{ video.title }}</h3>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'vendor/jarallax/dist/jarallax.min.js' %}"></script>
+    <script src="{% static 'vendor/imagesloaded/imagesloaded.pkgd.min.js' %}"></script>
+    <script src="{% static 'vendor/shufflejs/dist/shuffle.min.js' %}"></script>
+{% endblock %}

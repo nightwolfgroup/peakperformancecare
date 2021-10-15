@@ -1,0 +1,29 @@
+<section class="container">{% load static add_class %}
+    <div class="row justify-content-center">
+        <div class="col-lg-10 col-md-9">
+            <div class="card border-0 box-shadow-lg">
+                <form class="card-body needs-validation p-5"
+                        {% if form.is_multipart %} enctype="multipart/form-data"{% endif %} action="{{ value.form_action }}" method="post" novalidate>
+                    {{ form.media }}
+                    {% csrf_token %}
+                    {% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
+                    <div class="row justify-content-center">
+                        {% for field in form.visible_fields %}
+                            <div class="col-lg-6">
+                                <div class="form-group py-lg-4">
+                                    {{ field.label_tag|add_class:"form-label" }}
+                                    {{ field }}
+                                    {% if field.help_text %}
+                                        <small class="form-text text-muted">{{ field.help_text }}</small>{% endif %}
+                                    {{ field.errors|add_class:"text-danger" }}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <input type="submit" value="{{ value.form.submit_button_text }}" class="form-control btn-primary">
+                </form>
+            </div>
+        </div>
+    </div>
+</section>{% block extra_js %}
+    <script src="{% static 'vendor/cleave.js/dist/cleave.min.js' %}"></script>{% endblock %}

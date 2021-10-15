@@ -1,0 +1,161 @@
+{% extends 'base/base-alt.html' %}{% load static wagtailcore_tags wagtailimages_tags %}
+
+{% block json_ld %}
+    {% image self.image original as blog_image %}
+    {% image settings.core.BusinessSettings.logo_dark width-153 format-jpeg as logo %}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "{{ page.full_url }}"
+      },
+      "headline": "{{ page.title }}",
+      "image": "{{ page.get_site.root_url }}{{ blog_image.url }}",
+      "datePublished": "{{ self.created_on|date:"c" }}",
+      "dateModified": "{{ self.updated_on|date:"c" }}",
+      "author": {
+        "@type": "Person",
+        "name": "{{ self.author.first_name }} {{ self.author.last_name }}"
+      },
+       "publisher": {
+        "@type": "Organization",
+        "name": "{{ settings.core.BusinessSettings.name }}",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "{{ page.get_site.root_url }}{{ logo.url }}"
+        }
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Blog",
+        "item": "{{ page.get_site.root_url }}{{ page.get_parent.url }}"
+      },{
+        "@type": "ListItem",
+        "position": 2,
+        "name": "{{ page.title }}",
+        "item": "{{ page.full_url }}"
+      }]
+    }
+    </script>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-9 py-4 mb-2 mb-sm-0 pb-sm-5">
+            <div class="pb-4" style="max-width: 38rem;">
+                <nav aria-label="breadcrumb">
+                    <ol class="py-1 my-2 breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{{ page.get_parent.url }}">Blog</a></li>
+                        {% for category in self.categories.all %}
+                            {% if forloop.counter == 1 %}
+                                <li class="breadcrumb-item">
+                                    <a href="{{ page.get_parent.url }}category/{{ category.slug }}">{{ category }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        <li class="breadcrumb-item active" aria-current="page">{{ page.title }}</li>
+                    </ol>
+                </nav>
+                <h1>{{ page.title }}</h1>
+            </div>
+            <div class="row position-relative no-gutters align-items-center border-top border-bottom mb-4">
+                <div class="col-md-6 py-3 pr-md-3">
+                    <div class="d-flex align-items-center justify-content-center justify-content-md-start">
+                        <div class="media media-ie-fix align-items-center mr-grid-gutter">
+                            <a class="d-block" href="#">
+                                <img class="rounded-circle mr-1" width="64" {% if self.author.wagtail_userprofile.avatar %}src="{{ self.author.wagtail_userprofile.avatar.url }}" {% else %}src="{% static 'img/jpg/profile-placeholder-sm.jpg' %}"{% endif %} alt="{{ self.author.first_name }} {{ self.author.last_name }}"/>
+                            </a>
+                            <div class="media-body pl-2">
+                                <h6 class="nav-heading mb-1">
+                                    <a href="#">{{ self.author.first_name }} {{ self.author.last_name }}</a></h6>
+                                <div class="text-nowrap">
+                                    <div class="meta-link font-size-xs">
+                                        <i class="fe-calendar mr-1 mt-n1"></i>&nbsp;{{ self.updated_on.date }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-none d-md-block position-absolute border-left h-100" style="top: 0; left: 50%; width: 1px;"></div>
+                <div class="col-md-6 pl-md-3 py-3">
+                    <div class="d-flex align-items-center justify-content-center justify-content-md-end">
+                        <h6 class="text-nowrap my-2 mr-3">Share post:</h6>
+                        <a class="social-btn sb-outline sb-facebook ml-2 my-2" href="#"><i class="fe-facebook"></i></a><a class="social-btn sb-outline sb-twitter ml-2 my-2" href="#"><i class="fe-twitter"></i></a><a class="social-btn sb-outline sb-google ml-2 my-2" href="#"><i class="fe-google"></i></a><a class="social-btn sb-outline sb-email ml-2 my-2" href="#"><i class="fe-mail"></i></a>
+                    </div>
+                </div>
+            </div>
+            <!-- Post content-->
+            {% for block in page.content %}{% include_block block %}{% endfor %}
+            <!-- Tags + Sharing-->
+            <div class="row no-gutters position-relative align-items-center border-top border-bottom my-5">
+                <div class="col-md-6 py-2 py-dm-3 pr-md-3 text-center text-md-left">
+                    {% for tag in self.tags.all %}<a class="cs-tag mr-2 my-2" href="#">#{{ tag|lower }}</a>{% endfor %}
+                </div>
+                <div class="d-none d-md-block position-absolute border-left h-100" style="top: 0; left: 50%; width: 1px;"></div>
+                <div class="col-md-6 pl-md-3 py-2 py-md-3">
+                    <div class="d-flex align-items-center justify-content-center justify-content-md-end">
+                        <h6 class="text-nowrap my-2 mr-3">Share post:</h6>
+                        <a class="social-btn sb-outline sb-facebook ml-2 my-2" href="#"><i class="fe-facebook"></i></a><a class="social-btn sb-outline sb-twitter ml-2 my-2" href="#"><i class="fe-twitter"></i></a><a class="social-btn sb-outline sb-google ml-2 my-2" href="#"><i class="fe-google"></i></a><a class="social-btn sb-outline sb-email ml-2 my-2" href="#"><i class="fe-mail"></i></a>
+                    </div>
+                </div>
+            </div>
+            <nav class="d-flex justify-content-between pb-4 mb-5" aria-label="Entry navigation">
+                {% if self.get_previous_by_created_on %}
+                    <a class="cs-entry-nav mr-3" href="{{ self.get_previous_by_created_on.url }}">
+                        <h3 class="h5 pb-sm-2">Previous post</h3>
+                        <div class="media">
+                            <div class="cs-entry-nav-thumb d-none d-sm-block">
+                                <picture>
+                                    {% image self.get_previous_by_created_on.image fill-128x128 format-webp as image_webp %}
+                                    <source srcset="{{ image_webp.url }}" type="image/webp">
+                                    {% image self.get_previous_by_created_on.image fill-128x128 format-png as image_png %}
+                                    <source srcset="{{ image_png.url }}" type="image/png">
+                                    {% image self.get_previous_by_created_on.image fill-128x128 class='rounded' format-png %}
+                                </picture>
+                            </div>
+                            <div class="media-body pl-sm-3">
+                                <h4 class="nav-heading font-size-md font-weight-medium mb-0">{{ self.get_previous_by_created_on }}</h4>
+                                <span class="font-size-xs text-muted">by {{ self.get_previous_by_created_on.author.first_name }} {{ self.get_previous_by_created_on.author.last_name }}</span>
+                            </div>
+                        </div>
+                    </a>
+                {% else %}
+                    <div class="cs-entry-nav mr-3"></div>
+                {% endif %}
+                {% if self.get_next_by_created_on %}
+                    <a class="cs-entry-nav ml-3" href="{{ self.get_next_by_created_on.url }}">
+                        <h3 class="h5 pb-sm-2 text-right">Next post</h3>
+                        <div class="media">
+                            <div class="media-body text-right pr-sm-3">
+                                <h4 class="nav-heading font-size-md font-weight-medium mb-0">{{ self.get_next_by_created_on }}</h4>
+                                <span class="font-size-xs text-muted">by {{ self.get_next_by_created_on.author.first_name }} {{ self.get_next_by_created_on.author.last_name }}</span>
+                            </div>
+                            <div class="cs-entry-nav-thumb d-none d-sm-block">
+                                <picture>
+                                    {% image self.get_next_by_created_on.image fill-128x128 format-webp as image_webp %}
+                                    <source srcset="{{ image_webp.url }}" type="image/webp">
+                                    {% image self.get_next_by_created_on.image fill-128x128 format-png as image_png %}
+                                    <source srcset="{{ image_png.url }}" type="image/png">
+                                    {% image self.get_next_by_created_on.image fill-128x128 class='rounded' format-png %}
+                                </picture>
+                            </div>
+                        </div>
+                    </a>
+                {% endif %}
+            </nav>
+        </div>
+    </div>
+</div>
+{% endblock %}

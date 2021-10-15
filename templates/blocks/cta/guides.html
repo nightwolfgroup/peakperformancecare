@@ -1,0 +1,32 @@
+<section class="container overflow-hidden py-5 py-md-6 py-lg-7">{% load static wagtailcore_tags wagtailimages_tags %}
+    <div class="row justify-content-center">
+        <div class="col-lg-7 col-md-8 col-sm-10 text-center">
+            <h2>{{ self.title }}</h2>
+            <div class="font-size-lg text-darker mb-5 pb-2">{{ self.subtitle|richtext }}</div>
+        </div>
+    </div>
+    <div class="cs-masonry-filterable pt-3 pt-md-0 justify-content-center">
+        <div class="cs-masonry-grid" data-columns="3">
+            {% for guide in self.guides %}
+                <div class="cs-grid-item" data-groups="[&quot;web&quot;]">
+                    <a class="card card-hover border-0 shadow-lg" href="{{ guide.button.url }}" {% if guide.button.new_tab %}target="_blank" rel="noopener"{% endif %}>
+                        <picture>
+                            {% image guide.image fill-780x680 format-webp as image_webp %}
+                            <source srcset="{{ image_webp.url }}" type="image/webp">
+                            {% image guide.image fill-780x680 format-png as image_png %}
+                            <source srcset="{{ image_png.url }}" type="image/png">
+                            {% image guide.image fill-780x680 class='card-img-top' format-png %}
+                        </picture>
+                        <div class="card-body text-center">
+                            <p class="font-size-md text-primary mb-2">{{ guide.text }}</p>
+                            <button class="btn {{ guide.button.button_color }}">{{ guide.button.button_text }}</button>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>{% block extra_js %}
+    <script src="{% static 'vendor/imagesloaded/imagesloaded.pkgd.min.js' %}"></script>
+    <script src="{% static 'vendor/shufflejs/dist/shuffle.min.js' %}"></script>
+{% endblock %}

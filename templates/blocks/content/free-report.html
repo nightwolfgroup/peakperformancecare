@@ -1,0 +1,56 @@
+<section class="py-5 py-md-4 py-lg-5">{% load wagtailimages_tags wagtailcore_tags %}
+    <div class="container py-3 py-lg-4">
+        <div class="row align-items-center">
+            <div class="col-md-6 mb-5 mb-md-0">
+                <div class="mx-auto mx-md-0" style="max-width: 525px;">
+                    <picture>
+                        {% image self.guide_image width-525 format-webp as image_webp %}
+                        <source srcset="{{ image_webp.url }}" type="image/webp">
+                        {% image self.guide_image width-525 format-png as image_png %}
+                        <source srcset="{{ image_png.url }}" type="image/png">
+                        {% image self.guide_image width-525 class="d-block" format-png %}
+                    </picture>
+                </div>
+                <div class="row justify-content-center py-5">
+                    <a class="btn btn-warning" data-toggle="modal" data-target="#optinmodal">{{ self.button_text }}</a>
+                </div>
+            </div>
+            <div class="col-md-6 text-center text-md-left">
+                <div class="font-size-xl">{{ self.subtitle|richtext }}</div>
+                <div class="row text-left mx-4 mx-md-auto pt-3">
+                    <div class="col-12">
+                        <div class="row justify-content-center">
+                            <p class="font-size-xl text-heading"><b>{{ self.discovery_title }}</b></p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        {% for discovery in self.discoveries %}
+                            {% if not forloop.counter|divisibleby:2 %}
+                                <div class="d-flex mb-4 pb-2"><i class="fe-check-circle h4 text-success"></i>
+                                    <div class="pl-3">
+                                        <h3 class="h5">{{ discovery.heading }}</h3>
+                                        {% if discovery.subtext %}
+                                            <p class="font-size-md mb-0">{{ discovery.subtext }}</p>{% endif %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="col-md-6">
+                        {% for discovery in self.discoveries %}
+                            {% if forloop.counter|divisibleby:2 %}
+                                <div class="d-flex mb-4 pb-2"><i class="fe-check-circle h4 text-success"></i>
+                                    <div class="pl-3">
+                                        <h3 class="h5">{{ discovery.heading }}</h3>
+                                        {% if discovery.subtext %}
+                                            <p class="font-size-md mb-0">{{ discovery.subtext }}</p>{% endif %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

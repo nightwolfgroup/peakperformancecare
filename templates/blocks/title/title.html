@@ -1,0 +1,13 @@
+<section class="jarallax bg-gradient py-4" data-jarallax data-speed="0.25">{% load static wagtailimages_tags %}
+    <span class="bg-overlay" style="background-color: {{ self.image_overlay_color }}; opacity: {{ self.image_overlay_opacity }};"></span>{% image self.image original as title_image %}
+    <div class="jarallax-img" style="background-image: url({{ title_image.url }});"></div>
+    <div class="container bg-overlay-content py-5 py-sm-7 text-center">
+        <div class="py-md-5">
+            <img class="py-4 d-lg-none" src="{% static 'img/logo/logo-light.png' %}"/>
+            <p class="font-size-xl text-light opacity-80 pt-md-4 d-none d-lg-inline" style="letter-spacing: 3px">{{ settings.core.BusinessSettings.name.upper }}</p>
+            <h1 class="text-light py-3 mx-4">{{ self.title }}</h1>
+            <p class="font-size-xl text-light opacity-80">{{ self.subtitle }}</p>
+        </div>
+    </div>
+</section>{% block extra_js %}
+    <script src="{% static 'vendor/jarallax/dist/jarallax.min.js' %}"></script>{% endblock %}

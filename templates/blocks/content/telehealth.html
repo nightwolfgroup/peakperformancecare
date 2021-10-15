@@ -1,0 +1,21 @@
+<section class="bg-light">{% load static wagtailimages_tags %}
+    <div class="container pb-5 pt-sm-4 py-md-3">
+        <div class="row align-items-center pb-3 pb-md-0 mx-lg-6">
+            <div class="col-md-6 col-lg-6 pb-2 pb-md-0 mx-auto">
+                <div class="mx-auto mx-md-0 py-3" style="max-width: 495px;">
+                    <picture>
+                        {% image self.image original format-webp as image_webp %}
+                        <source srcset="{{ image_webp.url }}" type="image/webp">
+                        {% image self.image original format-png as image_png %}
+                        <source srcset="{{ image_png.url }}" type="image/png">
+                        {% image self.image original format-png %}
+                    </picture>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-6 text-center">
+                <h2>{{ self.heading }}</h2>
+                <a class="btn {{ self.button.button_color }}" href="{{ self.button.url }}" {% if self.button.new_tab %}target="_blank" rel="noopener"{% endif %}>{{ self.button.button_text }}</a>
+            </div>
+        </div>
+    </div>
+</section>

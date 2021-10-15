@@ -1,0 +1,12 @@
+{% load wagtailcore_tags %}
+<div class="container py-3">
+    {% if self.block_title %}<h2 class="h3 pt-1 pb-4">{{ self.block_title }}</h2>{% endif %}
+    <div class="bg-faded-primary rounded-lg p-4 mb-4">
+        <div class="p-md-3">
+            <blockquote class="blockquote mb-0">
+                <div class="text-nav">{{ self.quote|richtext }}</div>
+                <footer class="blockquote-footer">{{ self.attribution }}</footer>
+            </blockquote>
+        </div>
+    </div>
+</div>

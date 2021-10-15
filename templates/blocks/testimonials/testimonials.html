@@ -1,0 +1,54 @@
+{% load static wagtailimages_tags %}
+
+{% block extra_css %}
+    <link rel="stylesheet" media="screen" href="{% static 'vendor/tiny-slider/dist/tiny-slider.css' %}"/>
+{% endblock %}
+
+{% if testimonials %}
+    <section class="position-relative bg-dark pt-6 pb-7" style="z-index: 2;">{% load static %}
+        <div class="container pb-5">
+            <h2 class="text-light text-center pb-1 mb-5">Testimonials</h2>
+        </div>
+    </section>
+    <div class="bg-overlay-content container pb-3" style="margin-top: -150px;">
+        <div class="cs-carousel">
+            <div class="cs-carousel-inner" data-carousel-options="{&quot;items&quot;: 2, &quot;nav&quot;: false, &quot;gutter&quot;: 23, &quot;responsive&quot;: {&quot;0&quot;:{&quot;items&quot;:1},&quot;800&quot;:{&quot;items&quot;:2}}}">
+                {% for testimonial in testimonials %}
+                    <div class="pb-2">
+                        <div class="card h-100 border-0 shadow-lg mx-1">
+                            <div class="card-body py-5 px-4">
+                                <div class="d-sm-flex py-sm-4 px-lg-3">
+                                    <div class="text-sm-center mt-0 mt-sm-n3">
+                                        <span class="d-sm-block brand-red mr-2 mr-sm-0 mb-n3" style="font-size: 3.75rem;"><i class="fe-quotes"></i> </span>
+                                    </div>
+                                    <div class="pl-sm-4 pl-lg-5">
+                                        {% if testimonial.featured_quote %}
+                                            <h3 class="h4 mb-1">{{ testimonial.featured_quote }}</h3>{% endif %}
+                                        <p class="font-size-sm mb-2">{{ testimonial.quote }}</p>
+                                        <div class="media font-size-sm align-items-center pt-2">
+                                            {% if testimonial.image %}
+                                                <picture>
+                                                    {% image testimonial.image fill-42x42 format-webp as image_webp %}
+                                                    <source srcset="{{ image_webp.url }}" type="image/webp">
+                                                    {% image testimonial.image fill-42x42 format-png as image_png %}
+                                                    <source srcset="{{ image_png.url }}" type="image/png">
+                                                    {% image testimonial.image fill-42x42 class="rounded-circle" format-png %}
+                                                </picture>
+                                            {% endif %}
+                                            <div class="media-body pl-2 ml-1 mt-n1">by<span class="font-weight-semibold ml-1">{{ testimonial.attribution }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+{% block extra_js %}
+    <script src="{% static 'vendor/tiny-slider/dist/min/tiny-slider.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% load static wagtailimages_tags %}{% block extra_css %}
+    <link rel="stylesheet" media="screen" href="{% static 'vendor/lightgallery.js/dist/css/lightgallery.min.css' %}"/>{% endblock %}
+<div class="container">
+    {% image self.thumbnail original as video_thumbnail %}
+        <div class="jumbotron bg-size-cover bg-position-center bg-no-repeat text-center py-7 mb-0" style="background-image: url({{ video_thumbnail.url }});">
+            <a class="cs-video-btn my-2" href="link-to-youtube/vimeo-video" data-sub-html='<h6 class="font-size-sm text-light">Video caption</h6>'></a>
+            <br>
+            <span class="font-size-sm text-light">Click me to watch video!</span>
+        </div>
+</div>{% block extra_js %}
+    <script src="{% static 'vendor/lightgallery.js/dist/js/lightgallery.min.js' %}"></script>
+    <script src="{% static 'vendor/shufflejs/dist/shuffle.min.js' %}"></script>{% endblock %}

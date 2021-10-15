@@ -1,0 +1,10 @@
+<div class="col-lg-2 col-md-3 col-sm-4 pb-1 mb-4">
+    <div class="cs-widget">
+        <p class="h4 cs-widget-title">{{ menu_heading }}</p>
+        <ul>
+            {% for item in menu_items %}
+            <li><a class="cs-widget-link" href="{{ item.href }}">{{ item.text }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>

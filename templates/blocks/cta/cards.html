@@ -1,0 +1,35 @@
+{% load static wagtailcore_tags %}
+
+{% block extra_css %}
+    <link rel="stylesheet" media="screen" href="{% static 'vendor/tiny-slider/dist/tiny-slider.css' %}"/>
+{% endblock %}
+
+<div class="position-relative" style="height: 420px; background-color: {{ self.background_color }}">
+    <div class="cs-shape cs-shape-bottom cs-shape-curve bg-body">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 185.4">
+            <path fill="currentColor" d="M3000,0v185.4H0V0c496.4,115.6,996.4,173.4,1500,173.4S2503.6,115.6,3000,0z"></path>
+        </svg>
+    </div>
+</div>
+<section class="container bg-overlay-content pt-5 pt-md-6 pb-2" style="margin-top: -420px;">
+    <h2 class="text-center pt-3 pt-md-2 mb-5 text-light">{{ self.heading }}</h2>
+    <div class="cs-carousel">
+        <div class="cs-carousel-inner" data-carousel-options="{&quot;items&quot;: 2, &quot;controls&quot;: false, &quot;autoHeight&quot;: true, &quot;responsive&quot;: {&quot;0&quot;:{&quot;items&quot;:1, &quot;gutter&quot;: 16},&quot;500&quot;:{&quot;items&quot;:2, &quot;gutter&quot;: 16},&quot;850&quot;:{&quot;items&quot;:3, &quot;gutter&quot;: 16}, &quot;1100&quot;:{&quot;items&quot;:3, &quot;gutter&quot;: 23}}}">
+            {% for card in self.cards %}
+            <div class="pb-2">
+                <article class="card card-hover h-100 border-0 shadow-lg pt-2 pb-2 mx-1">
+                    <div class="card-body text-center"><i class="{{ card.icon }} h1 text-primary"></i>
+                        <h3 class="h4 mb-2 mx-4">{{ card.heading }}</h3>
+                        <div class="font-size-md text-body">{{ card.content|richtext }}</div>
+                        <a class="btn {{ card.button.button_color }} mx-auto mt-2" href="{{ card.button.url }}" {% if card.button.new_tab %}target="_blank" rel="noopener"{% endif %}>{{ card.button.button_text }}</a>
+                    </div>
+                </article>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% block extra_js %}
+    <script src="{% static 'vendor/tiny-slider/dist/min/tiny-slider.js' %}"></script>
+{% endblock %}

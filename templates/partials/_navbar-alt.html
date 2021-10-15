@@ -1,0 +1,62 @@
+{% load static wagtailimages_tags %}
+<header class="cs-header navbar navbar-expand-lg navbar-light navbar-box-shadow navbar-sticky">
+    <div class="container px-0 px-xl-3">
+        <button class="navbar-toggler ml-n2 mr-2" type="button" data-toggle="offcanvas" data-offcanvas-id="primaryMenu">
+            <span class="navbar-toggler-icon"></span></button>
+        <a class="navbar-brand order-lg-1 mx-auto ml-lg-0" href="/">
+            <picture>
+                {% image settings.core.BusinessSettings.logo_dark max-306x110 format-webp as image_webp %}
+                <source srcset="{{ image_webp.url }}" type="image/webp">
+                {% image settings.core.BusinessSettings.logo_dark max-306x110 format-png as image_png %}
+                <source srcset="{{ image_png.url }}" type="image/png">
+                {% image settings.core.BusinessSettings.logo_light max-306x110 class="navbar-floating-logo d-none d-lg-block" format-png %}
+            </picture>
+            <picture>
+                {% image settings.core.BusinessSettings.logo_dark width-153 format-webp as image_webp %}
+                <source srcset="{{ image_webp.url }}" type="image/webp">
+                {% image settings.core.BusinessSettings.logo_dark width-153 format-png as image_png %}
+                <source srcset="{{ image_png.url }}" type="image/png">
+                {% image settings.core.BusinessSettings.logo_dark width-153 class="navbar-stuck-logo" format-png %}
+            </picture>
+            <picture>
+                {% image settings.core.BusinessSettings.logo_icon width-58 format-webp as image_webp %}
+                <source srcset="{{ image_webp.url }}" type="image/webp">
+                {% image settings.core.BusinessSettings.logo_icon width-58 format-png as image_png %}
+                <source srcset="{{ image_png.url }}" type="image/png">
+                {% image settings.core.BusinessSettings.logo_icon width-58 class="d-lg-none" format-png %}
+            </picture>
+        </a>
+        <div class="d-flex align-items-center order-lg-3 ml-lg-auto">
+            <a class="btn btn-warning" href="tel:{{ settings.core.BusinessSettings.phone }}"><i class="fe-phone-call font-size-lg mr-2 font-weight-bold"></i><b>{{ settings.core.BusinessSettings.phone }}</b>
+            </a></div>
+        <div class="cs-offcanvas-collapse order-lg-2" id="primaryMenu">
+            <div class="cs-offcanvas-cap navbar-box-shadow">
+                <h5 class="mt-1 mb-0">Menu</h5>
+                <button class="close lead" type="button" data-toggle="offcanvas" data-offcanvas-id="primaryMenu">
+                    <span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="cs-offcanvas-body">
+                <ul class="navbar-nav">
+                    {% for item in menu_items %}
+                        <li class="nav-item{% if item.sub_menu %} dropdown{% endif %}">
+                            {% if item.sub_menu %}
+                                <a href="{{ item.href }}" class="nav-link dropdown-toggle {% if forloop.first %}pl-0{% endif %} {% if forloop.last %}pr-0{% endif %}" data-toggle="dropdown">{{ item.text }}</a>
+                            {% else %}
+                                <a href="{{ item.href }}" class="nav-link {% if forloop.first %}pl-0{% endif %} {% if forloop.last %}pr-0{% endif %}">{{ item.text }}</a>
+                            {% endif %}
+                            {% if item.sub_menu %}
+                                <ul class="dropdown-menu">
+                                    {% for sub_item in item.sub_menu.items %}
+                                        <li class="dropdown">
+                                            <a class="dropdown-item" href="{{ sub_item.href }}">{{ sub_item.text }}</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>

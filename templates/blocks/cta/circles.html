@@ -1,0 +1,34 @@
+{% load static wagtailimages_tags %}
+<section class="bg-gradient position-relative pt-6 pb-5 py-sm-6">
+    {% image self.background_image original as bg_image %}
+    <div class="bg-overlay bg-size-cover opacity-100" style="background-color: transparent; background-image: url({{ bg_image.url }});"></div>
+    <div class="bg-overlay-content container py-2">
+        <div class="row align-items-center">
+            <div class="col-lg-5 offset-lg-1 order-lg-2 pb-5 pb-lg-0 text-center text-lg-left">
+                <img src="{% static 'img/logo/logo-mountains.png' %}" alt="Logo Mountains" class="pb-2" width="145" height="55">
+                <h2 class="text-light">{{ self.heading }}</h2>
+                <p class="text-light mb-0">{{ self.subtext }}</p>
+            </div>
+            <div class="col-lg-6 order-lg-1">
+                <div class="row">
+                    {% for item in self.links %}
+                        <div class="col-sm-4 mb-2 pb-4 mb-sm-0 pb-sm-0">
+                            <div class="px-2 text-center cta-link">
+                                <a class="text-decoration-none" href="{{ item.link.url }}" {% if item.link.new_tab %}target="_blank" rel="noopener"{% endif %}>
+                                    <picture>
+                                        {% image item.icon width-105 format-webp as image_webp %}
+                                        <source srcset="{{ image_webp.url }}" type="image/webp">
+                                        {% image item.icon width-105 format-png as image_png %}
+                                        <source srcset="{{ image_png.url }}" type="image/png">
+                                        {% image item.icon width-105 class="bg-light rounded-circle mb-2" format-png %}
+                                    </picture>
+                                    <p class="font-size-sm font-weight-medium text-light mb-0 pt-1 text-decoration-none">{{ item.link.link_text }}</p>
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

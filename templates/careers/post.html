@@ -1,0 +1,299 @@
+{% extends 'base/base-alt.html' %}{% load static wagtailcore_tags %}
+
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" media="screen" href="{% static 'vendor/flatpickr/dist/flatpickr.min.css' %}">
+{% endblock %}
+
+{% block json_ld %}
+    <script type="application/ld+json">
+    {
+      "@context" : "https://schema.org/",
+      "@type" : "JobPosting",
+      "title" : "{{ self.title }}",
+      "description" : "<p>{{ self.content|richtext|striptags|truncatewords:50 }}</p>",
+      "datePosted" : "{{ self.created_on|date:"Y-m-d" }}",
+      "validThrough" : "{{ self.valid_until|date:"Y-m-d" }}T{{ self.valid_until|time:"H:i" }}",
+      "employmentType" : "{% if self.position_type == 'Full-time' %}
+        FULL_TIME{% elif self.position_type == 'Part-time' %}PART_TIME{% elif self.position_type == 'Per-diem' %}
+        PER_DIEM{% else %}OTHER{% endif %}",
+      "hiringOrganization" : {
+        "@type" : "Organization",
+        "name" : "{{ settings.core.BusinessSettings.name }}",
+        "sameAs" : "{{ page.get_site.root_url }}",
+        "logo" : "http://www.example.com/images/logo.png"
+      },
+      "jobLocation": {
+      "@type": "Place",
+        "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "{{ settings.core.BusinessSettings.street_address }}",
+        "addressLocality": "{{ settings.core.BusinessSettings.city }}",
+        "addressRegion": "{{ settings.core.BusinessSettings.state }}",
+        "postalCode": "{{ settings.core.BusinessSettings.zip }}",
+        "addressCountry": "US"
+        }
+      }{% if self.salary %},
+     "baseSalary": {
+        "@type": "MonetaryAmount",
+        "currency": "USD",
+        "value": {
+          "@type": "QuantitativeValue",
+          "value": {{ self.salary }},
+          "unitText": "{% if self.salary_unit == 'Hourly' %}HOUR{% elif self.salary_unit == 'Daily' %}DAY
+    {% elif self.salary_unit == 'Weekly' %}WEEK{% elif self.salary_unit == 'Monthly' %}MONTH
+    {% elif self.salary_unit == 'Yearly' %}YEAR{% endif %}"
+        }
+      }{% endif %}
+    }
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+    <div class="row justify-content-center">
+    <div class="col-lg-9 py-4 mb-2 mb-sm-0 pb-sm-5">
+    <div class="pb-1">
+        <nav aria-label="breadcrumb">
+            <ol class="py-1 my-2 breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% slugurl 'hiring' %}">Hiring</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ self.title }}</li>
+            </ol>
+        </nav>
+        <div class="row">
+            <div class="col-8">
+                <h1 class="mb-0">{{ self.title }}</h1>
+                <p class="text-dark">{{ settings.core.BusinessSettings.city }}, {{ settings.core.BusinessSettings.state }} · {{ self.position_type }}</p>
+            </div>
+            <div class="col-4 text-right">
+                {% if self.status == 'Position Filled' %}
+                    <a class="btn btn-outline-dark disabled">Position Filled</a>
+                {% else %}
+                    <a class="btn btn-warning" data-toggle="modal" data-target="#application-modal">Apply Now</a>
+                {% endif %}
+            </div>
+            {% for message in messages %}{% include 'partials/_alerts.html' %}{% endfor %}
+        {% for field in form %}{% if field.errors %}{{ field.name }}{{ field.errors }}{% endif %}{% endfor %}
+        </div>
+    </div>
+    <div class="row position-relative no-gutters align-items-center border-top border-bottom mb-4">
+        <div class="col-md-6 py-2 pr-md-3">
+            <div class="d-flex align-items-center justify-content-center justify-content-md-start">
+                <div class="media media-ie-fix align-items-center mr-grid-gutter">
+                    <div class="media-body pl-2">
+                        <div class="text-nowrap">
+                            <div class="meta-link font-size-md">
+                                <i class="fe-alert-circle mr-1 mt-n1"></i>&nbsp;{{ self.status }}</div>
+                            <span class="meta-divider"></span>
+                            <div class="meta-link font-size-md">
+                                <i class="fe-dollar-sign mr-1 mt-n1"></i>&nbsp;{{ self.salary }} {{ self.salary_unit }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-none d-md-block position-absolute border-left h-100" style="top: 0; left: 50%; width: 1px;"></div>
+        <div class="col-md-6 pl-md-3 py-2">
+            <div class="d-flex align-items-center justify-content-center justify-content-md-end">
+                <h6 class="text-nowrap my-2 mr-3">Share post:</h6>
+                <a class="social-btn sb-outline sb-facebook ml-2 my-2" href="#"><i class="fe-facebook"></i></a><a class="social-btn sb-outline sb-twitter ml-2 my-2" href="#"><i class="fe-twitter"></i></a><a class="social-btn sb-outline sb-google ml-2 my-2" href="#"><i class="fe-google"></i></a><a class="social-btn sb-outline sb-email ml-2 my-2" href="#"><i class="fe-mail"></i></a>
+            </div>
+        </div>
+    </div>
+    {{ self.content|richtext }}
+    <div class="row no-gutters position-relative align-items-center border-top border-bottom my-5">
+        <div class="col-md-6 py-2 py-md-2 pr-md-3 text-center text-md-left">
+            {% if self.status == 'Position Filled' %}
+                <a class="btn btn-outline-dark disabled">Position Filled</a>
+            {% else %}
+                <a class="btn btn-warning" data-toggle="modal" data-target="#application-modal">Apply Now</a>
+            {% endif %}
+        </div>
+        <div class="d-none d-md-block position-absolute border-left h-100" style="top: 0; left: 50%; width: 1px;"></div>
+        <div class="col-md-6 pl-md-3 py-1 py-md-2">
+            <div class="d-flex align-items-center justify-content-center justify-content-md-end">
+                <h6 class="text-nowrap my-2 mr-3">Share post:</h6>
+                <a class="social-btn sb-outline sb-facebook ml-2 my-2" href="#"><i class="fe-facebook"></i></a><a class="social-btn sb-outline sb-twitter ml-2 my-2" href="#"><i class="fe-twitter"></i></a><a class="social-btn sb-outline sb-google ml-2 my-2" href="#"><i class="fe-google"></i></a><a class="social-btn sb-outline sb-email ml-2 my-2" href="#"><i class="fe-mail"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="application-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Apply: {{ self.title }}</h4>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <form id="application-form" class="needs-validation mx-2" enctype="multipart/form-data" method="POST" action="." novalidate>
+                        {% csrf_token %}{{ form.position }}
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label class="form-label" for="id_first_name">First
+                                    Name<sup class="text-danger ml-1">*</sup></label>
+                                {{ form.first_name }}
+                                <div class="invalid-feedback">{{ form.first_name.errors }}</div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-label" for="id_last_name">Last
+                                    Name<sup class="text-danger ml-1">*</sup></label>
+                                {{ form.last_name }}
+                                <div class="invalid-feedback">{{ form.last_name.errors }}</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label class="form-label" for="id_phone">Phone<sup class="text-danger ml-1">*</sup></label>
+                                {{ form.phone }}
+                                <div class="invalid-feedback">{{ form.phone.errors }}</div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-label" for="id_email">Email<sup class="text-danger ml-1">*</sup></label>
+                                {{ form.email }}
+                                <div class="invalid-feedback">{{ form.email.errors }}</div>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="form-group col-md-4">
+                                <label class="form-label" for="id_applicant_address">Home
+                                    Address<sup class="text-danger ml-1">*</sup></label>
+                                {{ form.applicant_address }}
+                                <div class="invalid-feedback">{{ form.applicant_address.errors }}</div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label class="form-label" for="id_applicant_city">City<sup class="text-danger ml-1">*</sup></label>
+                                {{ form.applicant_city }}
+                                <div class="invalid-feedback">{{ form.applicant_city.errors }}</div>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="form-label" for="id_applicant_state">State<sup class="text-danger ml-1">*</sup></label>
+                                {{ form.applicant_state }}
+                                <div class="invalid-feedback">{{ form.applicant_state.errors }}</div>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="form-label" for="id_applicant_zip">Zip<sup class="text-danger ml-1">*</sup></label>
+                                {{ form.applicant_zip }}
+                                <div class="invalid-feedback">{{ form.applicant_zip.errors }}</div>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center pt-3 border-top border-bottom">
+                            <div class="form-group col-md-4">
+                                <label>If hired, are you able to provide proof you are eligible to work in the U.S.?<sup class="text-danger ml-1">*</sup></label>
+                                {% for radio in form.eligible %}
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        {{ radio.tag }}
+                                        <label class="custom-control-label" for="{{ radio.id_for_label }}">{{ radio.choice_label }}</label>
+                                    </div>
+                                {% endfor %}
+                                <div class="invalid-feedback">{{ form.eligible.errors }}</div>
+                            </div>
+                            <div class="form-group col-md-4 border-right border-left">
+                                <label>Do you have reliable transportation to get you to and from work?<sup class="text-danger ml-1">*</sup></label>
+                                {% for radio in form.transportation %}
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        {{ radio.tag }}
+                                        <label class="custom-control-label" for="{{ radio.id_for_label }}">{{ radio.choice_label }}</label>
+                                    </div>
+                                {% endfor %}
+                                <div class="invalid-feedback">{{ form.transportation.errors }}</div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Is there any time that you cannot work?<sup class="text-danger ml-1">*</sup></label>
+                                {% for radio in form.cannot_work %}
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        {{ radio.tag }}
+                                        <label class="custom-control-label" for="{{ radio.id_for_label }}">{{ radio.choice_label }}</label>
+                                    </div>
+                                {% endfor %}
+                                <div class="invalid-feedback">{{ form.cannot_work.errors }}</div>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="form-group col-md-6">
+                                <label class="form-label" for="ref_name">Reference Name<sup class="text-danger ml-1">*</sup></label>
+                                {{ form.ref_name }}
+                                <div class="invalid-feedback">{{ form.ref_name.errors }}</div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-label" for="id_ref_phone">Reference Phone
+                                    Number<sup class="text-danger ml-1">*</sup></label>
+                                {{ form.ref_phone }}
+                                <div class="invalid-feedback">{{ form.ref_phone.errors }}</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label class="form-label" for="id_ref_relation">What is your relationship with this
+                                    reference?<sup class="text-danger ml-1">*</sup></label>
+                                {{ form.ref_relation }}
+                                <div class="invalid-feedback">{{ form.ref_relation.errors }}</div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-label" for="id_ref_years">How many years have you known this
+                                    person?<sup class="text-danger ml-1">*</sup></label>
+                                {{ form.ref_years }}
+                                <div class="invalid-feedback">{{ form.ref_years.errors }}</div>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="form-group col-md-6">
+                                <label for="id_education" class="form-label">Highest level of education
+                                    completed:</label>
+                                {{ form.education }}
+                                <div class="invalid-feedback">Please provide a valid selection.</div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-label" for="id_start_date">What date can you
+                                    start?<sup class="text-danger ml-1">*</sup></label>
+                                <div class="input-group-overlay">
+                                    {{ form.start_date }}
+                                    <div class="input-group-append-overlay">
+                                        <span class="input-group-text"><i class="fe-calendar"></i></span>
+                                    </div>
+                                </div>
+                                <div class="invalid-feedback">{{ form.start_date.errors }}</div>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="form-group col-md-6">
+                                <label for="id_resume" class="form-label">Resume<sup class="text-danger ml-1">*</sup></label>
+                                <div class="cs-file-drop-area">
+                                    <div class="cs-file-drop-icon fe-upload"></div>
+                                    <span class="cs-file-drop-message">Drag and drop here to upload</span>
+                                    {{ form.resume }}
+                                    <button type="button" class="cs-file-drop-btn btn btn-primary btn-sm">Or select file</button>
+                                </div>
+                                <div class="invalid-feedback">{{ form.resume.errors }}</div>
+                                <small class="form-text text-muted text-center">Accepted formats: .pdf, .docx, .doc, .pages</small>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="id_cover_letter" class="form-label">Cover Letter</label>
+                                <div class="cs-file-drop-area">
+                                    <div class="cs-file-drop-icon fe-upload"></div>
+                                    <span class="cs-file-drop-message">Drag and drop here to upload</span>
+                                    {{ form.cover_letter }}
+                                    <button type="button" class="cs-file-drop-btn btn btn-primary btn-sm">Or select
+                                        file
+                                    </button>
+                                </div>
+                                <div class="invalid-feedback">{{ form.cover_letter.errors }}</div>
+                                <small class="form-text text-muted text-center">Accepted formats: .pdf, .docx, .doc, .pages</small>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline-danger btn-sm" type="button" data-dismiss="modal">Close</button>
+                    <button class="btn btn-success btn-shadow btn-sm" form="application-form" type="submit">Submit
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block extra_js %}
+    <script src="{% static 'vendor/flatpickr/dist/flatpickr.min.js' %}"></script>
+    <script src="{% static 'vendor/cleave.js/dist/cleave.min.js' %}"></script>
+{% endblock %}

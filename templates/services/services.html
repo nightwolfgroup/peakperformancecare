@@ -1,0 +1,61 @@
+{% extends 'base/base.html' %}{% load static wagtailimages_tags wagtailcore_tags %}
+
+{% block content %}
+    <section class="jarallax bg-gradient pt-5 pb-7 pt-md-7" data-jarallax data-speed="0.65">
+        <span class="bg-overlay" style="opacity: {{ self.overlay_opacity }}; background-color: {{ self.overlay_color }}"></span>{% image self.title_image width-1920 as title_background %}
+        <div class="jarallax-img" style="background-image: url({{ title_background.url }});"></div>
+        <div class="cs-shape cs-shape-bottom cs-shape-slant bg-body">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 260">
+                <polygon fill="currentColor" points="0,257 0,260 3000,260 3000,0"></polygon>
+            </svg>
+        </div>
+        <div class="container bg-overlay-content pt-3 pb-7 pt-md-0">
+            <div class="row justify-content-center pb-2 pt-6">
+                <div class="col-lg-10">
+                    <h1 class="text-light">{{ page.title }}</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="py-1 my-2 breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="/" class="text-light">Home</a></li>
+                            <li class="breadcrumb-item active text-light" aria-current="page">{{ page.title }}</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="container bg-overlay-content">
+        <div class="row justify-content-center" style="margin-top: -240px;"></div>
+    </section>
+    <section class="pt-2 pb-4 py-md-0 bg-overlay-content">
+        <div class="container py-3 pt-md-0">
+            <h2 class="text-center mb-5">{{ service.title }}</h2>
+            <div class="row justify-content-center">
+                {% for service in services %}
+                    <div class="col-lg-4 col-md-4 col-sm-6 mb-grid-gutter">
+                        <div class="card border-0 box-shadow-lg mx-auto" style="max-width: 23rem;">
+                            <div class="card-img">
+                                <picture>
+                                    {% image service.service_icon fill-718x718 format-webp as image_webp %}
+                                    <source srcset="{{ image_webp.url }}" type="image/webp">
+                                    {% image service.service_icon fill-718x718 format-png as image_png %}
+                                    <source srcset="{{ image_png.url }}" type="image/png">
+                                    {% image service.service_icon fill-718x718 format-png %}
+                                </picture>
+                            </div>
+                            <div class="card-img-overlay bg-dark justify-content-center text-center">
+                                <h3 class="h4 text-light mb-1">{{ service.title }}</h3>
+                                <div class="font-size-lg text-light mb-0">{{ service.service_description|richtext }}</div>
+                                <a class="btn btn-primary" href="{{ service.url }}">Learn More</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'vendor/jarallax/dist/jarallax.min.js' %}"></script>
+{% endblock %}

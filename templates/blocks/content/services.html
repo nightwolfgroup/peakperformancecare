@@ -1,0 +1,27 @@
+<section class="pt-2 pb-4 py-md-0 bg-overlay-content">{% load wagtailimages_tags wagtailcore_tags %}
+    <div class="container py-3 pt-md-0">
+        <h2 class="text-center mb-5">{{ service.title }}</h2>
+        <div class="row justify-content-center">
+            {% for service in services %}
+                <div class="col-lg-4 col-md-4 col-sm-6 mb-grid-gutter">
+                    <div class="card border-0 box-shadow-lg mx-auto" style="max-width: 23rem;">
+                        <div class="card-img">
+                            <picture>
+                                {% image service.service_icon fill-718x718 format-webp as image_webp %}
+                                <source srcset="{{ image_webp.url }}" type="image/webp">
+                                {% image service.service_icon fill-718x718 format-png as image_png %}
+                                <source srcset="{{ image_png.url }}" type="image/png">
+                                {% image service.service_icon fill-718x718 format-png %}
+                            </picture>
+                        </div>
+                        <div class="card-img-overlay bg-dark justify-content-center text-center">
+                            <h3 class="h4 text-light mb-1">{{ service.title }}</h3>
+                            <div class="font-size-lg text-light mb-0">{{ service.service_description|richtext }}</div>
+                            <a class="btn btn-primary" href="{{ service.url }}">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>

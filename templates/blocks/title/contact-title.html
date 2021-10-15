@@ -1,0 +1,47 @@
+{% load static wagtailimages_tags %}
+<section class="jarallax bg-gradient pt-5 pb-7 pt-md-7" data-jarallax data-speed="0.25">
+    <span class="bg-overlay" style="opacity: .{{ self.overlay_opacity }}; background-color: {{ self.overlay_color }}"></span>{% image self.background_image max-1920x1080 as background_image %}
+    <div class="jarallax-img" style="background-image: url({{ background_image.url }});"></div>
+    <div class="cs-shape cs-shape-bottom cs-shape-slant bg-body">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 260">
+            <polygon fill="currentColor" points="0,257 0,260 3000,260 3000,0"></polygon>
+        </svg>
+    </div>
+    <div class="container bg-overlay-content pt-3 pb-7 pt-md-0">
+        <div class="row justify-content-center pb-7">
+            <div class="col-lg-10">
+                <h1 class="text-light">{{ self.heading }}</h1>
+                {% if self.subheading %}<p class="text-light">{{ self.subheading }}</p>{% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+<section class="container bg-overlay-content pb-5">
+    <div class="row">
+        <div class="col-lg-6 col-md-7 offset-lg-1 pb-2 mb-5" style="margin-top: -260px;">
+            <div class="card border-0 box-shadow-lg">
+                <div class="card-body needs-validation p-5">
+                    <script type='text/javascript' src='{{ self.infusionsoft_form }}'></script>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4 offset-md-1">
+            <h2 class="h4 pb-3">Contact details</h2>
+            <h3 class="h6 pb-2">{{ settings.core.BusinessSettings.city }}, {{ settings.core.BusinessSettings.state }}</h3>
+            <ul class="list-unstyled font-size-sm pb-3">
+                <li class="d-flex align-items-top mb-3">
+                    <i class="fe-map-pin font-size-xl text-muted mt-1 mr-2 pr-1"></i>
+                    <div>{{ settings.core.BusinessSettings.street_address }}, <br>{{ settings.core.BusinessSettings.city }}, {{ settings.core.BusinessSettings.state }} {{ settings.core.BusinessSettings.zip }}
+                    </div>
+                </li>
+                <li class="d-flex align-items-center mb-3"><i class="fe-mail font-size-xl text-muted mr-2 pr-1"></i>
+                    <div>{{ settings.core.BusinessSettings.email }}</div>
+                </li>
+                <li class="d-flex align-items-center mb-3"><i class="fe-phone font-size-xl text-muted mr-2 pr-1"></i>
+                    <div>{{ settings.core.BusinessSettings.phone }}</div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>{% block extra_js %}
+    <script src="{% static 'vendor/jarallax/dist/jarallax.min.js' %}"></script>{% endblock %}

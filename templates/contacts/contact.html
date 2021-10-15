@@ -1,0 +1,71 @@
+{% extends 'base/base.html' %}{% load static wagtailcore_tags wagtailimages_tags %}
+
+{% block extra_css %}
+    <link rel="stylesheet" media="screen" href="{% static 'vendor/lightgallery.js/dist/css/lightgallery.min.css' %}"/>
+{% endblock %}
+
+{% block content %}
+    <section class="jarallax bg-gradient pt-5 pb-7 pt-md-7" data-jarallax data-speed="0.65">
+        <span class="bg-overlay" style="opacity: {{ self.overlay_opacity }}; background-color: {{ self.overlay_color }}"></span>{% image self.title_image width-1920 as title_background %}
+        <div class="jarallax-img" style="background-image: url({{ title_background.url }});"></div>
+        <div class="cs-shape cs-shape-bottom cs-shape-slant bg-body">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 260">
+                <polygon fill="currentColor" points="0,257 0,260 3000,260 3000,0"></polygon>
+            </svg>
+        </div>
+        <div class="container bg-overlay-content pt-3 pb-7 pt-md-0">
+            <div class="row justify-content-center pb-2 pt-6">
+                <div class="col-lg-10">
+                    <h1 class="text-light">{{ page.title }}</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="py-1 my-2 breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="/" class="text-light">Home</a></li>
+                            <li class="breadcrumb-item active text-light" aria-current="page">{{ page.title }}</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="container bg-overlay-content pb-5">
+        <div class="row">
+            <div class="col-lg-6 col-md-7 offset-lg-1 pb-2 mb-5" style="margin-top: -190px;">
+                <div class="card border-0 box-shadow-lg">
+                    <div class="card-body p-3">
+                        {{ self.form|safe }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 offset-md-1">
+                <h2 class="h4 pb-3">Contact details</h2>
+                <h3 class="h6 pb-2">{{ settings.core.BusinessSettings.city }}, {{ settings.core.BusinessSettings.state }}</h3>
+                <ul class="list-unstyled font-size-sm pb-3">
+                    <li class="d-flex align-items-top mb-3">
+                        <i class="fe-map-pin font-size-xl text-muted mt-1 mr-2 pr-1"></i>
+                        <div>{{ settings.core.BusinessSettings.street_address }}<br/>{{ settings.core.BusinessSettings.mailing_address }}<br/>{{ settings.core.BusinessSettings.city }}, {{ settings.core.BusinessSettings.state }} {{ settings.core.BusinessSettings.zip }}<br><a class="cs-fancy-link" href="#map" data-scroll>See on the map</a>
+                        </div>
+                    </li>
+                    <li class="d-flex align-items-center mb-3"><i class="fe-mail font-size-xl text-muted mr-2 pr-1"></i>
+                        <div>{{ settings.core.BusinessSettings.email }}</div>
+                    </li>
+                    <li class="d-flex align-items-center mb-3">
+                        <i class="fe-phone font-size-xl text-muted mr-2 pr-1"></i>
+                        <div>Phone: {{ settings.core.BusinessSettings.phone }}</div>
+                    </li>
+                    <li class="d-flex align-items-center mb-3">
+                        <i class="fe-file-text font-size-xl text-muted mr-2 pr-1"></i>
+                        <div>Fax: {{ settings.core.BusinessSettings.fax }}</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>{% image self.map_image fill-1920x419 as map_image %}
+    <section class="cs-gallery" id="map"><a class="cs-gallery-item cs-map-popup bg-position-center bg-no-repeat py-7 text-center" href="{{ self.map_link }}" data-iframe="true" data-sub-html="&lt;h6 class=&quot;font-size-sm text-light&quot;&gt;{{ settings.core.BusinessSettings.street_address }}, {{ settings.core.BusinessSettings.city }}, {{ settings.core.BusinessSettings.state }} {{ settings.core.BusinessSettings.zip }}&lt;/h6&gt;" style="background-image: url({{ map_image.url }});"><span class="cs-gallery-caption"><i class="fe-maximize-2 font-size-xl mt-n1 mr-2"></i>Expand the map</span>
+          <div class="d-inline-block py-4 py-md-6"></div></a></section>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'vendor/lightgallery.js/dist/js/lightgallery.min.js' %}"></script>
+    <script src="{% static 'vendor/jarallax/dist/jarallax.min.js' %}"></script>
+{% endblock %}

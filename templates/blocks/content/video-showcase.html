@@ -1,0 +1,66 @@
+{% load static wagtailimages_tags %}
+
+<section class="container overflow-hidden pb-4 pb-md-2 bg-overlay-content">
+    {% if self.heading %}<h2 class="text-center pt-4 pt-md-0">{{ self.heading }}</h2>{% endif %}
+    {% if self.subheading %}<p class="text-center text-muted pb-4">{{ self.subheading }}</p>{% endif %}
+    <div class="cs-masonry-filterable mb-3">
+        <ul class="cs-masonry-filters nav nav-tabs justify-content-center pb-4">
+            <li class="nav-item"><a class="btn btn-outline-light active" href="#" data-group="all">All</a></li>
+            {% for group in self.video_groups %}
+                <li class="nav-item">
+                    <a class="btn btn-outline-light" href="#" data-group="{{ group.group_title|slugify }}">{{ group.group_title }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+        <div class="cs-masonry-grid" data-columns="3">
+            <!-- Videos -->
+            {% for video_group in self.video_groups %}
+                {% for group_videos in video_group.group_videos %}
+                    <div class="cs-grid-item" data-groups="[&quot;{{ video_group.group_title|slugify }}&quot;]">
+                        <a class="card card-hover border-0 box-shadow-lg" data-toggle="modal" data-target="#{{ group_videos.heading|slugify }}">
+                            <picture>
+                                {% image group_videos.thumbnail fill-680x580 format-webp as image_webp %}
+                                <source srcset="{{ image_webp.url }}" type="image/webp">
+                                {% image group_videos.thumbnail fill-680x580 format-png as image_png %}
+                                <source srcset="{{ image_png.url }}" type="image/png">
+                                {% image group_videos.thumbnail fill-680x580 class="card-img-top" format-png %}
+                            </picture>
+                            <div class="card-body text-center">
+                                <h3 class="h5 nav-heading mb-2">{{ group_videos.heading }}</h3>
+                                {% if group_videos.subheading %}
+                                    <p class="font-size-sm text-muted mb-2">{{ group_videos.subheading }}</p>
+                                {% endif %}
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Modal Forms -->
+{% for video_group in self.video_groups %}
+    {% for group_videos in video_group.group_videos %}
+        <div class="modal fade" tabindex="-2" role="dialog" id="{{ group_videos.heading|slugify }}">
+            <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+                <div class="modal-content justify-content-center text-center">
+                    <div class="modal-header mx-auto w-full">
+                        <h4 class="modal-title text-center">{{ group_videos.form_title }}</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        {{ group_videos.form|safe }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endfor %}
+
+{% block extra_js %}
+    <script src="{% static 'vendor/imagesloaded/imagesloaded.pkgd.min.js' %}"></script>
+    <script src="{% static 'vendor/shufflejs/dist/shuffle.min.js' %}"></script>
+{% endblock %}

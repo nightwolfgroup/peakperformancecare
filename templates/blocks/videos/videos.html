@@ -1,0 +1,41 @@
+{% load static wagtailimages_tags %}
+<section class="container overflow-hidden pt-5 pt-md-6 pt-lg-7 pb-4 pb-md-2">
+    <h2 class="text-center pt-4 pt-md-0">{{ self.heading }}</h2>
+    {% if self.subheading %}<p class="text-center text-muted pb-4">{{ self.subheading }}</p>{% endif %}
+    <div class="cs-masonry-filterable mb-3">
+        <ul class="cs-masonry-filters nav nav-tabs justify-content-center pb-4">
+            <li class="nav-item"><a class="nav-link active" href="#" data-group="all">All</a></li>
+            {% for group in self.image_groups %}
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-group="{{ group.group_title|slugify }}">{{ group.group_title }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+        <div class="cs-masonry-grid" data-columns="3">
+            {% for video_group in self.video_groups %}
+                {% for group_videos in video_group.group_videos %}
+                    <div class="cs-grid-item" data-groups="[&quot;{{ video_group.group_title|slugify }}&quot;]">
+                        <a class="card card-hover border-0 box-shadow" href="{{ group_videos.internal_page.url }}">
+                            <picture>
+                                {% image group_videos.thumbnail fill-780x680 format-webp as image_webp %}
+                                <source srcset="{{ image_webp.url }}" type="image/webp">
+                                {% image group_videos.thumbnail fill-780x680 format-png as image_png %}
+                                <source srcset="{{ image_png.url }}" type="image/png">
+                                {% image group_videos.thumbnail fill-780x680 class="card-img-top" format-png %}
+                            </picture>
+                            <div class="card-body text-center">
+                                <h3 class="h5 nav-heading mb-2">{{ group_videos.heading }}</h3>
+                                {% if group_videos.subheading %}
+                                    <p class="font-size-sm text-muted mb-2">{{ group_videos.subheading }}</p>
+                                {% endif %}
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+</section>{% block extra_js %}
+    <script src="{% static 'vendor/imagesloaded/imagesloaded.pkgd.min.js' %}"></script>
+    <script src="{% static 'vendor/shufflejs/dist/shuffle.min.js' %}"></script>
+{% endblock %}

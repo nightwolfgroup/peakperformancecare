@@ -1,0 +1,85 @@
+{% extends 'base/base-alt.html' %}{% load static wagtailcore_tags wagtailimages_tags %}
+
+{% block json_ld %}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [{ {% for frequent_question in self.FAQs.all %}
+        "@type": "Question",
+        "name": "{{ frequent_question.question }}",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "{{ frequent_question.answer }}"
+          }{% if forloop.last %} {% else %}
+      }, { {% endif %} {% endfor %}
+        }]
+    }
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="cs-sidebar-enabled">
+    <div class="container">
+        <div class="row">
+            <div class="cs-sidebar col-lg-3 pt-lg-5">
+                <div class="cs-offcanvas-collapse" id="help-sidebar">
+                    <div class="cs-offcanvas-cap navbar-box-shadow px-4 mb-3">
+                        <h5 class="mt-1 mb-0">Sidebar</h5>
+                        <button class="close lead" type="button" data-toggle="offcanvas" data-offcanvas-id="help-sidebar">
+                            <span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="cs-offcanvas-body px-4 pt-3 pt-lg-0 pl-lg-0 pr-lg-2 pr-xl-4" data-simplebar>
+                        <div class="cs-widget mb-5">
+                            <h3 class="cs-widget-title">Search help</h3>
+                            <div class="input-group-overlay">
+                                <div class="input-group-prepend-overlay">
+                                    <span class="input-group-text"><i class="fe-search"></i></span></div>
+                                <input class="form-control prepended-form-control" type="text" placeholder="Search">
+                            </div>
+                        </div>
+                        <div class="cs-widget mb-5">
+                            <h3 class="cs-widget-title">Related content</h3>
+                            <ul>
+                                {% for article in self.related_articles.all %}
+                                    <li class="d-flex">
+                                        <i class="fe-book text-muted mt-2 mr-2"></i><a class="cs-widget-link" href="{{ article.related_article.url }}">{{ article.related_article.title }}</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9 cs-content py-4">
+                <nav aria-label="breadcrumb">
+                    <ol class="py-1 my-2 breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{{ page.get_parent.url }}">{{ page.get_parent.title }}</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ self.title }}</li>
+                    </ol>
+                </nav>
+                <div class="d-md-flex justify-content-between pb-2 mb-4">
+                    <h1 class="mr-3" style="max-width: 38rem;">{{ self.title }}</h1>
+                </div>
+                <dl>
+                    {% for frequent_question in self.FAQs.all %}
+                        <dt class="font-size-xl">{{ frequent_question.question }}</dt>
+                        <dd class="font-size-md">{{ frequent_question.answer }}</dd>
+                    {% empty %}
+                        <p>Content Coming Soon!</p>
+                    {% endfor %}
+                </dl>
+                <div class="d-flex align-items-center border-top mt-5 py-4"></div>
+                <div class="text-center pt-3 pb-5 pb-md-6">
+                    <h2 class="h3 pb-2 mb-4">Haven't found the answer? We can help.</h2>
+                    <i class="fe-life-buoy d-block h2 pb-2 mb-4 text-primary"></i><a class="btn btn-primary mb-4" href="{% slugurl 'contact-us' %}">Send
+                    us a Message</a>
+                    <p class="font-size-sm mb-0">Contact us and we’ll get back to you as soon as possible.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

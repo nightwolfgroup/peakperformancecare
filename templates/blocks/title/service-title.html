@@ -1,0 +1,65 @@
+{% load static wagtailcore_tags wagtailimages_tags %}{% block extra_css %}
+    <link rel="stylesheet" media="screen" href="{% static 'vendor/tiny-slider/dist/tiny-slider.css' %}"/>{% endblock %}
+<section class="position-relative pt-7">
+    <div class="position-absolute jarallax bg-gradient w-100" style="top: 0; left: 0; height: 667px;" data-jarallax data-speed="0.75">
+        <span class="bg-overlay bg-darker" style="opacity: .8;"></span>{% image self.image max-1920x1080 as background_image %}
+        <div class="jarallax-img" style="background-image: url({{ background_image.url }});"></div>
+        <div class="cs-shape cs-shape-bottom cs-shape-curve-side bg-body">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 250">
+                <path fill="currentColor" d="M3000,0v250H0v-51c572.7,34.3,1125.3,34.3,1657.8,0C2190.3,164.8,2637.7,98.4,3000,0z"></path>
+            </svg>
+        </div>
+    </div>
+    <div class="container bg-overlay-content pt-lg-7">
+        <div class="row pt-4">
+            <div class="col-xl-5 col-md-6 pl-lg-4 pb-4 pt-md-5 py-lg-0 text-center text-md-left">
+                <h1 class="text-light pb-1 line-height-h3">{{ self.title }}</h1>
+                <div class="text-light pb-2 pb-md-4">{{ self.subtitle|richtext }}</div>
+                <div class="d-sm-flex justify-content-center justify-content-md-start">
+                    <div class="mr-sm-3 mb-3">
+                        <a class="btn btn-primary" data-toggle="modal" data-target="#optinmodal">{{ self.button_text }}</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4 col-lg-5 col-md-6 offset-xl-3 offset-lg-1 pt-lg-7">
+                <div class="cs-carousel pt-lg-2 mt-lg-5">
+                    <div class="cs-frame-phone mx-auto">
+                        <div class="cs-frame-phone-status-bar text-light">
+                            <span class="text-nowrap">{% now "g:i A" %}</span><span class="text-nowrap text-right"><i class="fe-wifi mr-2"></i><i class="fe-battery-charging"></i></span>
+                        </div>
+                        <div class="cs-frame-phone-body">
+                            <div class="cs-carousel-inner" data-carousel-options="{&quot;mode&quot;: &quot;gallery&quot;, &quot;controls&quot;: false, &quot;nav&quot;: false, &quot;autoplay&quot;: true, &quot;autoplayTimeout&quot;: 6000}">
+                                <picture>
+                                    {% image self.guide_image fill-616x1334 format-webp as image_webp %}
+                                    <source srcset="{{ image_webp.url }}" type="image/webp">
+                                    {% image self.guide_image fill-616x1334 format-png as image_png %}
+                                    <source srcset="{{ image_png.url }}" type="image/png">
+                                    {% image self.guide_image fill-616x1334 format-png %}
+                                </picture>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="container pt-lg-6">
+    <div class="d-none d-lg-block" style="margin-top: -430px;"></div>
+    <div class="row mt-0 mt-md-n4 pt-5 pt-md-0">
+        <div class="col-xl-8 col-lg-7">
+            <div class="d-none d-lg-block"></div>
+            <h2 class="mb-4 mb-sm-5 text-center text-md-left">{{ self.discovery_title }}</h2>
+            <div class="row text-center text-sm-left">
+                {% for discovery in self.discoveries %}
+                    <div class="col-sm-6 mb-sm-4">
+                        <h3 class="h5 mb-1">{{ discovery.heading }}</h3>{% if discovery.subtext %}
+                        <p class="font-size-md">{{ discovery.subtext }}</p>{% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>{% block extra_js %}
+    <script src="{% static 'vendor/jarallax/dist/jarallax.min.js' %}"></script>
+    <script src="{% static 'vendor/tiny-slider/dist/min/tiny-slider.js' %}"></script>{% endblock %}

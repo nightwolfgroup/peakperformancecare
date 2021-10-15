@@ -1,0 +1,92 @@
+<!DOCTYPE html>{% load static wagtailcore_tags wagtailimages_tags wagtailmetadata_tags menu_tags wagtailuserbar %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }} | Peak Performance Care{% endif %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% meta_tags %}
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/favicon/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon-16x16.png' %}">
+    <link rel="mask-icon" color="#5bbad5" href="{% static 'safari-pinned-tab.svg' %}">
+    <meta name="msapplication-TileColor" content="#d9d6c6">
+    <meta name="theme-color" content="#ffffff">
+    {% include 'partials/_loading.html' %}
+    {% block extra_css %}{% endblock %}
+    <link rel="stylesheet" media="screen" href="{% static 'vendor/simplebar/dist/simplebar.min.css' %}"/>
+    <link rel="stylesheet" media="screen" href="{% static 'css/theme.min.css' %}">
+    {% block json_ld %}{% endblock %}
+</head>
+<body>
+<div class="cs-page-loading active">
+    <div class="cs-page-loading-inner">
+        <div class="cs-page-spinner"></div>
+        <span>Loading...</span>
+    </div>
+</div>
+<main class="cs-page-wrapper">{% wagtailuserbar 'bottom-left' %}
+    {% main_menu max_levels=3 add_sub_menus_inline=True template="partials/_navbar-alt.html" %}
+    <div class="cs-sidebar-enabled">
+    <div class="container">
+        <div class="row">
+            <div class="cs-sidebar col-lg-3 pt-lg-5">
+                <div class="cs-offcanvas-collapse" id="help-sidebar">
+                    <div class="cs-offcanvas-cap navbar-box-shadow px-4 mb-3">
+                        <h5 class="mt-1 mb-0">Sidebar</h5>
+                        <button class="close lead" type="button" data-toggle="offcanvas" data-offcanvas-id="help-sidebar">
+                            <span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="cs-offcanvas-body px-4 pt-3 pt-lg-0 pl-lg-0 pr-lg-2 pr-xl-4" data-simplebar>
+                        <div class="cs-widget mb-5">
+                            <h3 class="cs-widget-title">Related articles</h3>
+                            <ul>
+                                {% for article in self.related_articles.all %}
+                                    <li class="d-flex">
+                                        <i class="fe-book text-muted mt-2 mr-2"></i>
+                                        <a class="cs-widget-link" href="{{ article.related_article.url }}">{{ article.related_article.title }}</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9 cs-content py-4">
+                <nav aria-label="breadcrumb">
+                    <ol class="py-1 my-2 breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="/">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="{{ page.get_parent.url }}">Legal & Regulatory Information</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ page.title }}</li>
+                    </ol>
+                </nav>
+                <div class="d-md-flex justify-content-between pb-2 mb-4">
+                    <h1 class="mr-3" style="max-width: 38rem;">{{ page.title }}</h1>
+                    <span class="font-size-sm text-muted text-md-nowrap pt-2">Posted on {{ page.created_on|date:"F j, Y" }}</span>
+                </div>
+                {{ self.policy|richtext }} Last updated: {{ page.updated_on|date:"F j, Y" }}
+                <div class="d-flex align-items-center border-top mt-5 py-4"></div>
+                <div class="text-center pt-3 pb-5 pb-md-6">
+                    <h2 class="h3 pb-2 mb-4">Haven't found the answer? We can help.</h2>
+                    <i class="fe-life-buoy d-block h2 pb-2 mb-4 text-primary"></i>
+                    <a class="btn btn-primary mb-4" href="{% slugurl 'contact-us' %}">Send us a Message</a>
+                    <p class="font-size-sm mb-0">Contact us and we’ll get back to you as soon as possible.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</main>
+{% include 'partials/_footer.html' %}
+<a class="btn-scroll-top" href="#top" data-scroll><span class="btn-scroll-top-tooltip text-muted font-size-sm mr-2">Top</span><i class="btn-scroll-top-icon fe-arrow-up"></i></a>
+<script src="{% static 'vendor/jquery/dist/jquery.slim.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'vendor/simplebar/dist/simplebar.min.js' %}"></script>
+<script src="{% static 'vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js' %}"></script>
+{% block extra_js %}{% endblock %}
+<script src="{% static 'js/theme.min.js' %}"></script>
+</body>
+</html>

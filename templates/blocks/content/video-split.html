@@ -1,0 +1,32 @@
+{% load static wagtailimages_tags %}{% block extra_css %}<link rel="stylesheet" media="screen" href="{% static 'vendor/lightgallery.js/dist/css/lightgallery.min.css' %}"/>{% endblock %}
+<section class="bg-light">
+    <div class="row no-gutters">
+        <div class="col-md-6 jarallax py-7" data-jarallax data-speed="0.3">
+            <span class="bg-overlay" style="opacity: 40%;"></span>{% image self.image max-1918x1200 as video_image %}
+            <div class="jarallax-img" style="background-image: url({{ video_image.url }});"></div>
+            <div class="bg-overlay-content d-flex flex-column align-items-center justify-content-center h-100 px-3 py-4 py-lg-7">
+                <a class="cs-video-btn mb-3" href="{{ self.video_link }}" data-sub-html="&lt;h6 class=&quot;font-size-sm text-light&quot;&gt;{{ self.heading }}&lt;/h6&gt;"></a><span class="font-weight-medium text-light">{{ self.action_text }}</span>
+            </div>
+        </div>
+        <div class="col-md-6 px-3 pr-xl-0 pl-lg-5 pl-xl-6 py-2 py-lg-4 border-top border-bottom">
+            <div class="ml-sm-4 py-5 my-sm-0 py-md-6 py-lg-7" style="max-width: 520px;">
+                <h2 class="mb-5">{{ self.heading }}</h2>
+                {% for list_item in self.list_items %}
+                    <div class="media {% if not forloop.last %}mb-grid-gutter{% endif %}">
+                        <i class="h2 {{ list_item.icon }} d-block mt-1"></i>
+                        <div class="media-body pl-4 ml-2">
+                            <h3 class="h5 mb-1">{{ list_item.heading }}</h3>
+                            <p class="font-size-sm mb-0">{{ list_item.subtext }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>{% block extra_js %}
+    <script src="{% static 'vendor/jarallax/dist/jarallax.min.js' %}"></script>
+    <script src="{% static 'vendor/jarallax/dist/jarallax-element.min.js' %}"></script>
+    <script src="{% static 'vendor/lightgallery.js/dist/js/lightgallery.min.js' %}"></script>
+    <script src="{% static 'vendor/lg-fullscreen.js/dist/lg-fullscreen.min.js' %}"></script>
+    <script src="{% static 'vendor/lg-zoom.js/dist/lg-zoom.min.js' %}"></script>
+    <script src="{% static 'vendor/lg-video.js/dist/lg-video.min.js' %}"></script>{% endblock %}

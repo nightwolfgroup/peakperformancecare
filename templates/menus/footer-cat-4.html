@@ -1,0 +1,7 @@
+<div class="col-md-6 order-md-2 text-md-right mb-3">
+    <ul class="list-inline font-size-sm mb-0">
+        {% for item in menu_items %}
+            <li class="list-inline-item"><a class="nav-link-style nav-link-dark" href="{{ item.href }}">{{ item.text }}</a></li>
+        {% endfor %}
+    </ul>
+</div>

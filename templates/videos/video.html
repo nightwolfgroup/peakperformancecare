@@ -1,0 +1,50 @@
+{% extends 'base/base.html' %}{% load static wagtailimages_tags wagtailcore_tags %}
+
+{% block extra_css %}
+    <link rel="stylesheet" media="screen" href="{% static 'vendor/lightgallery.js/dist/css/lightgallery.min.css' %}"/>
+{% endblock %}
+
+{% block content %}
+    <section class="jarallax bg-gradient pt-5 pb-7 pt-md-7" data-jarallax data-speed="0.95">
+        <span class="bg-overlay" style="opacity: {{ self.overlay_opacity }}; background-color: {{ self.overlay_color }}"></span>{% image self.title_image width-1920 as title_background %}
+        <div class="jarallax-img" style="background-image: url({{ title_background.url }});"></div>
+        <div class="cs-shape cs-shape-bottom cs-shape-slant bg-body">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 260">
+                <polygon fill="currentColor" points="0,257 0,260 3000,260 3000,0"></polygon>
+            </svg>
+        </div>
+        <div class="container bg-overlay-content pt-3 pb-7 pt-md-0">
+            <div class="row justify-content-center pb-2 pt-6">
+                <div class="col-lg-10">
+                    <h1 class="text-light">{{ page.title }}</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="py-1 my-2 breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="/" class="text-light">Home</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="{{ page.get_parent.url }}" class="text-light">{{ page.get_parent.title }}</a>
+                            </li>
+                            <li class="breadcrumb-item active text-light" aria-current="page">{{ page.title }}</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="container bg-overlay-content">
+        <div class="row justify-content-center" style="margin-top: -200px;"></div>
+        {% image self.video_thumbnail original as video_thumbnail %}
+        <div class="jumbotron bg-size-cover bg-position-center bg-no-repeat text-center py-7 mb-0" style="background-image: url({{ video_thumbnail.url }});">
+            <a class="cs-video-btn my-7" href="{{ self.youtube_link }}" data-sub-html='<h6 class="font-size-sm text-light">{{ self.title }}</h6>'></a>
+        </div>
+    </section>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'vendor/jarallax/dist/jarallax.min.js' %}"></script>
+    <script src="{% static 'vendor/lightgallery.js/dist/js/lightgallery.min.js' %}"></script>
+    <script src="{% static 'vendor/lg-fullscreen.js/dist/lg-fullscreen.min.js' %}"></script>
+    <script src="{% static 'vendor/lg-zoom.js/dist/lg-zoom.min.js' %}"></script>
+    <script src="{% static 'vendor/lg-video.js/dist/lg-video.min.js' %}"></script>
+{% endblock %}

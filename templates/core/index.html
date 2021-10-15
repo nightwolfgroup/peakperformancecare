@@ -1,0 +1,109 @@
+{% extends 'base/base.html' %}{% load static wagtailimages_tags wagtailcore_tags %}
+
+{% block json_ld %}{% image settings.core.BusinessSettings.logo_light original format-jpeg as logo %}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "image": "https://peakperformancecare.com{{ logo.url }}",
+      "@id": "{{ page.full_url }}",
+      "name": "{{ settings.core.BusinessSettings.name }}",
+      "telephone": "{{ settings.core.BusinessSettings.phone }}",
+      "email": "{{ settings.core.BusinessSettings.email }}",
+      "faxNumber": "{{ settings.core.BusinessSettings.fax }}",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "{{ settings.core.BusinessSettings.street_address }}",
+        "addressLocality": "{{ settings.core.BusinessSettings.city }}",
+        "addressRegion": "{{ settings.core.BusinessSettings.state }}",
+        "postalCode": "{{ settings.core.BusinessSettings.zip }}",
+        "addressCountry": "US"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 37.977080,
+        "longitude": -120.339161
+      },
+      "url": "{{ page.full_url }}",
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday"
+          ],
+          "opens": "{{ settings.core.BusinessSettings.mon_open|time:'H:i' }}",
+          "closes": "{{ settings.core.BusinessSettings.mon_close|time:'H:i' }}"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Tuesday"
+          ],
+          "opens": "{{ settings.core.BusinessSettings.tue_open|time:'H:i' }}",
+          "closes": "{{ settings.core.BusinessSettings.tue_close|time:'H:i' }}"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Wednesday"
+          ],
+          "opens": "{{ settings.core.BusinessSettings.wed_open|time:'H:i' }}",
+          "closes": "{{ settings.core.BusinessSettings.wed_close|time:'H:i' }}"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Thursday"
+          ],
+          "opens": "{{ settings.core.BusinessSettings.thu_open|time:'H:i' }}",
+          "closes": "{{ settings.core.BusinessSettings.thu_close|time:'H:i' }}"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Friday"
+          ],
+          "opens": "{{ settings.core.BusinessSettings.fri_open|time:'H:i' }}",
+          "closes": "{{ settings.core.BusinessSettings.fri_close|time:'H:i' }}"
+        }
+      ]},
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "url": "https://www.peakperformancecare.com/",
+      "logo": "https://www.peakperformancecare.com/static/img/logo/logo-light.png"
+    }
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <section class="jarallax bg-gradient py-4" data-jarallax data-speed="0.25">
+        <span class="bg-overlay" style="background-color: {{ self.overlay_color }}; opacity: {{ self.overlay_opacity }};"></span>{% image self.title_image max-1920x1200 as title_image %}
+        <div class="jarallax-img" style="background-image: url({{ title_image.url }});"></div>
+        <div class="container bg-overlay-content py-5 py-sm-7 text-center">
+            <div class="py-md-5">
+                <picture>
+                    {% image settings.core.BusinessSettings.logo_light original format-webp as image_webp %}
+                    <source srcset="{{ image_webp.url }}" type="image/webp">
+                    {% image settings.core.BusinessSettings.logo_light original format-png as image_png %}
+                    <source srcset="{{ image_png.url }}" type="image/png">
+                    {% image settings.core.BusinessSettings.logo_light original class="py-4 d-lg-none" width="306" height="110" format-png %}
+                </picture>
+                <p class="font-size-xl text-light opacity-90 pt-md-4 d-none d-lg-inline" style="letter-spacing: 3px">{{ settings.core.BusinessSettings.name.upper }}</p>
+                <h1 class="text-light py-3 mx-4">{{ self.heading }}</h1>
+                {% if self.subheading %}
+                    <p class="font-size-xl text-light opacity-80">{{ self.subheading }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+    {% for block in page.content %}{% include_block block %}{% endfor %}
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'vendor/jarallax/dist/jarallax.min.js' %}"></script>
+{% endblock %}

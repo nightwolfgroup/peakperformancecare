@@ -1,0 +1,39 @@
+<footer class="cs-footer footer-box-shadow bg-white pt-5 pt-md-6">{% load static wagtailimages_tags menu_tags %}
+    <div class="container pt-3 pt-md-0">
+        <div class="row pb-3">
+            <div class="col-md-4 mt-n2 pb-3 pb-md-0 mb-4">
+                <a class="d-block mb-3" href="/" style="width: 250px;">
+                    <picture>
+                        {% image settings.core.BusinessSettings.logo_footer max-215x56 format-webp as image_webp %}
+                        <source srcset="{{ image_webp.url }}" type="image/webp">
+                        {% image settings.core.BusinessSettings.logo_footer max-215x56 format-png as image_png %}
+                        <source srcset="{{ image_png.url }}" type="image/png">
+                        {% image settings.core.BusinessSettings.logo_footer max-215x56 format-png %}
+                    </picture>
+                </a>
+                {% if settings.core.BusinessSettings.facebook %}
+                    <a class="social-btn sb-outline sb-facebook sb-dark sb-lg mr-2 mb-2" href="{{ settings.core.BusinessSettings.facebook }}" target="_blank" rel="noreferrer" aria-label="Facebook"><i class="fe-facebook"></i></a>{% endif %}
+                {% if settings.core.BusinessSettings.twitter %}
+                    <a class="social-btn sb-outline sb-twitter sb-dark sb-lg mr-2 mb-2" href="{{ settings.core.BusinessSettings.twitter }}" target="_blank" rel="noreferrer" aria-label="Twitter"><i class="fe-twitter"></i></a>{% endif %}
+                {% if settings.core.BusinessSettings.instagram %}
+                    <a class="social-btn sb-outline sb-instagram sb-dark sb-lg mr-2 mb-2" href="{{ settings.core.BusinessSettings.instagram }}" target="_blank" rel="noreferrer" aria-label="Instagram"><i class="fe-instagram"></i></a>{% endif %}
+                {% if settings.core.BusinessSettings.google %}
+                    <a class="social-btn sb-outline sb-google sb-dark sb-lg mr-2 mb-2" href="{{ settings.core.BusinessSettings.google }}" target="_blank" rel="noreferrer" aria-label="Google"><i class="fe-google"></i></a>{% endif %}
+                {% if settings.core.BusinessSettings.youtube %}
+                    <a class="social-btn sb-outline sb-youtube sb-dark sb-lg mr-2 mb-2" href="{{ settings.core.BusinessSettings.youtube }}" target="_blank" rel="noreferrer" aria-label="YouTube"><i class="fe-youtube"></i></a>{% endif %}
+            </div>
+            {% flat_menu 'footer-1' template='menus/footer-cat-1.html' max_levels=1 show_menu_heading=True fall_back_to_default_site_menus=True %}
+            {% flat_menu 'footer-2' template='menus/footer-cat-2.html' max_levels=1 show_menu_heading=True fall_back_to_default_site_menus=True %}
+            {% flat_menu 'footer-3' template='menus/footer-cat-3.html' max_levels=1 show_menu_heading=True fall_back_to_default_site_menus=True %}
+        </div>
+        <hr class="border-info">
+        <div class="row align-items-center my-3 pt-4">
+            {% flat_menu 'footer-4' template='menus/footer-cat-4.html' max_levels=1 show_menu_heading=False fall_back_to_default_site_menus=True %}
+            <div class="col-md-6 order-md-1 mb-3">
+                <p class="font-size-sm mb-0">
+                    <span class="text-black-50 opacity-80 mr-1">&copy;{% now "Y" %} All rights reserved. Made by</span><a class="nav-link-style nav-link-primary" href="https://nightwolfgroup.com/" target="_blank" rel="noopener">Nightwolf Media</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>

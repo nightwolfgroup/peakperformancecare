@@ -1,0 +1,40 @@
+<!DOCTYPE html>{% load static wagtailcore_tags wagtailimages_tags wagtailmetadata_tags menu_tags wagtailuserbar %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }} | Peak Performance Care{% endif %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% meta_tags %}
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/favicon/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon/favicon-16x16.png' %}">
+    <link rel="mask-icon" color="#5bbad5" href="{% static 'img/favicon/safari-pinned-tab.svg' %}">
+    <meta name="msapplication-TileColor" content="#d9d6c6">
+    <meta name="theme-color" content="#ffffff">
+    {% include 'partials/_loading.html' %}
+    {% block extra_css %}{% endblock %}
+    <link rel="stylesheet" media="screen" href="{% static 'vendor/simplebar/dist/simplebar.min.css' %}"/>
+    <link rel="stylesheet" media="screen" href="{% static 'css/theme.min.css' %}">
+    {% block json_ld %}{% endblock %}
+</head>
+<body>
+<div class="cs-page-loading active">
+    <div class="cs-page-loading-inner">
+        <div class="cs-page-spinner"></div>
+        <span>Loading...</span>
+    </div>
+</div>
+<main class="cs-page-wrapper">{% wagtailuserbar 'bottom-left' %}
+    {% main_menu max_levels=2 template="partials/_navbar.html" add_sub_menus_inline=True apply_active_classes=True %}
+    {% block content %}{% endblock %}
+</main>
+{% include 'partials/_footer.html' %}
+<a class="btn-scroll-top" href="#top" data-scroll><span class="btn-scroll-top-tooltip text-muted font-size-sm mr-2">Top</span><i class="btn-scroll-top-icon fe-arrow-up"></i></a>
+<script src="{% static 'vendor/jquery/dist/jquery.slim.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'vendor/simplebar/dist/simplebar.min.js' %}"></script>
+<script src="{% static 'vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js' %}"></script>
+{% block extra_js %}{% endblock %}
+<script src="{% static 'js/theme.min.js' %}"></script>
+</body>
+</html>
